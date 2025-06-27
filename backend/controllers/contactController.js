@@ -8,17 +8,19 @@ const sendContactEmail = async (req, res) => {
     return res.status(400).json({ error: 'Please fill in all fields.' });
   }
 
+  // ✅ Mailtrap Transporter Setup
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: process.env.MAILTRAP_HOST,
+    port: process.env.MAILTRAP_PORT,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: process.env.MAILTRAP_USER,
+      pass: process.env.MAILTRAP_PASS,
     },
   });
 
   const mailOptions = {
     from: email,
-    to: process.env.EMAIL_TO,
+    to: process.env.EMAIL_TO || 'test@example.com', // or a Mailtrap inbox email
     subject: `New Contact from ${name}`,
     text: `
       Name: ${name}
